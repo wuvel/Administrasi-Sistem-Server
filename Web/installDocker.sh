@@ -2,8 +2,8 @@
 
 usage()
 {
-    echo "usage: ./install.sh URLGithubRepository"
-    echo "example: ./install.sh https://github.com/wuvel/baddy.git"
+    echo "usage: ./installDocker.sh URLGithubRepository"
+    echo "example: ./installDocker.sh https://github.com/wuvel/baddy.git"
 }
 
 # Slicing nama repo (parameter) untuk mendapatkan nama folder
@@ -39,18 +39,19 @@ fi
 # Post-Installation Docker untuk non-root user
 if [ $(docker ps -a | grep -c "CONTAINER ID") -eq 1 ];
 then
-	echo -e "[V] Post-Installation Docker already done\n"
+	echo -e "[V] Post-Installation Docker already done"
 else
 	sudo groupadd docker
 	sudo usermod -aG docker ${USER}
 	echo -e "\nLogout and login back or run the script again!\n"
 	newgrp docker
+	exit
 fi
 
 # Cek folder clone repo apakah sudah ada, delete jika sudah ada
 if [ $(ls | grep -c "${NAME%.*}") -eq 1 ];
 then
-	echo "Deleting existing ${NAME%.*} folder"
+	echo "[V] Deleting existing ${NAME%.*} folder"
 	sudo rm -rf "${NAME%.*}"
 fi
 
@@ -60,7 +61,7 @@ success=$?
 
 if [[ $success -eq 0 ]];
 then
-    echo -e "Repository successfully cloned.\n"
+    echo -e "[V] Repository successfully cloned.\n"
 fi
 
 # Ke direktori clone tadi
@@ -75,16 +76,16 @@ if [ $(docker images | grep -c "tugasweb") -eq 0 ];
 then
 	docker build -t tugasweb . -q
 else
+	echo "Removing existing docker image and container:"
 	docker container stop "$sliced" 
-	docker container rm "$sliced" -f
-	docker image rm tugasweb -f
-	docker build -t tugasweb . -q
+	docker container rm "$sliced" -f 
+	docker image rm tugasweb -f 
+	docker build -t tugasweb . -q 
 fi
 
 # Run docker image pada port 80
 if [ $(docker container ls | grep -c "tugas") -eq 1 ];
 then
-	echo " "
 	echo "Apache and PHP Already Running via Docker"
 	echo "U can access your web server in localhost:80"
 	exit
