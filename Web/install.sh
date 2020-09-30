@@ -43,7 +43,7 @@ then
 else
 	sudo groupadd docker
 	sudo usermod -aG docker ${USER}
-	echo -e "\nLogout and login back!\n"
+	echo -e "\nLogout and login back or run the script again!\n"
 	newgrp docker
 fi
 
