@@ -12,8 +12,8 @@ NAME=${MYVAR##*/}
 
 
 # Update + Upgrade Package
-#sudo apt-get update
-#sudo apt-get upgrade
+sudo apt-get update
+sudo apt-get upgrade
 
 
 # Install Package yang dibutuhkan
@@ -39,6 +39,13 @@ then
 	sudo apt-get --yes install libapache2-mod-php;
 else
 	echo -e "[V] libapache2-mod-php package is installed"
+fi
+
+if [ $(dpkg-query -W -f='${Status}' git 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+	sudo apt-get --yes install git;
+else
+	echo -e "[V] git package is installed"
 fi
 
 
