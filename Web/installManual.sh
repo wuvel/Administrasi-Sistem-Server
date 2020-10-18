@@ -48,17 +48,6 @@ else
 	echo -e "[V] git package is installed"
 fi
 
-
-# Konfigurasi ServerName apache2
-if [ $(sudo cat /etc/apache2/apache2.conf | grep -c "ServerName 127.0.0.1") -eq 0 ];
-then
-	echo "ServerName 127.0.0.1" | sudo tee -a /etc/apache2/apache2.conf
-	echo "[V] Apache2 configuration configuration is complete."
-else
-	echo "[V] Apache2 configuration has been done before."
-fi
-
-
 # Cek status apache2 dan start
 if [ $(sudo systemctl status apache2 | grep -c "active (running)") -eq 1 ];
 then
